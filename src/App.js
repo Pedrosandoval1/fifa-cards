@@ -1,24 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import Buttons from "./componets/buttons";
+import s from "./style.module.css";
+import dataPrueba from "./data/PruebaData";
+import Article from "./componets/article";
+import Filtro from "./componets/filtros";
+import { useState } from "react";
 
 function App() {
+  const data = ["All", ...new Set(dataPrueba.map((art) => art.nation))];
+  const [articles, setArticles] = useState(dataPrueba);
+  const filterNations = (category) => {
+    if (category === "All") {
+      setArticles(dataPrueba);
+      return;
+    }
+    const filterCategory = dataPrueba.filter(
+      (article) => article.nation === category
+    );
+    setArticles(filterCategory);
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Filtro >
+        <Buttons   nations={data} filterNations={filterNations}  />
+      </Filtro>
+
+      <div className={s.container}>
+        <Article articles={articles} />
+      </div>
+    </>
   );
 }
 
